@@ -1,14 +1,12 @@
 package com.example.waterme.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.findNavController
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager2.widget.ViewPager2
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import com.example.waterme.R
 import com.example.waterme.adapter.PlantViewPagerAdapter
 import com.example.waterme.databinding.FragmentPlantListBinding
@@ -21,16 +19,17 @@ class PlantListFragment : Fragment() {
 
 
     private var _binding: FragmentPlantListBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private lateinit var plantList : ArrayList<PlantData>
+    private var plantList = arrayListOf<PlantData>()
     private lateinit var pagerAdapter: PlantViewPagerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         _binding = FragmentPlantListBinding.inflate(inflater, container, false)
@@ -41,24 +40,40 @@ class PlantListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        loadCards()
+        binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int,
+            ) {
+                (requireActivity() as AppCompatActivity).supportActionBar?.title =
+                    plantList[position].plantTitle
+            }
+
             override fun onPageSelected(position: Int) {
             }
 
             override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
             }
 
-            override fun onPageScrolled(position: Int,
-                                        positionOffset: Float,
-                                        positionOffsetPixels: Int) {
-                (requireActivity() as AppCompatActivity).supportActionBar?.title = plantList[position].plantTitle
-            }
         })
     }
 
-    private fun loadCards(){
+    private fun loadCards() {
 
+        plantList.add(PlantData(R.mipmap.test_image_1,
+            "MarshMallow",
+            "Description",
+            "October 5, 2015"))
+        plantList.add(PlantData(R.mipmap.test_image_1,
+            "MarshMallow",
+            "Description",
+            "October 5, 2015"))
+
+        pagerAdapter = PlantViewPagerAdapter(requireContext(), plantList)
+        binding.viewPager.adapter = pagerAdapter
+        binding.viewPager.setPadding(100, 0, 100, 0)
     }
 
     override fun onDestroyView() {
