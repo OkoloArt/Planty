@@ -1,9 +1,13 @@
 package com.example.waterme.model
 
-data class PlantData(
+import com.google.firebase.database.Exclude
 
-    val imageResources : Int,
-    val plantTitle : String,
-    val plantDescription : String,
-    val plantReminder : String
+data class Plants(
+    @get: Exclude
+    var plantId : String? = null,
+
+    var imageResources : String? = null,
+    var plantTitle : String? = null,
+    var plantDescription : String? = null,
+    var plantReminder : String? = null
 )
