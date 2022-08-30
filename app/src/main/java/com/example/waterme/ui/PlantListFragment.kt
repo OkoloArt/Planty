@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.viewpager.widget.ViewPager
-import com.example.waterme.R
 import com.example.waterme.adapter.PlantViewPagerAdapter
 import com.example.waterme.databinding.FragmentPlantListBinding
-import com.example.waterme.model.PlantData
+import com.example.waterme.model.Plants
+import com.example.waterme.viewmodel.PlantViewModel
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -24,8 +28,9 @@ class PlantListFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private var plantList = arrayListOf<PlantData>()
+    private var plantList = arrayListOf<Plants>()
     private lateinit var pagerAdapter: PlantViewPagerAdapter
+    private val plantViewModel: PlantViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,18 +67,19 @@ class PlantListFragment : Fragment() {
 
     private fun loadCards() {
 
-        plantList.add(PlantData(R.mipmap.test_image_1,
-            "MarshMallow",
-            "Description",
-            "October 5, 2015"))
-        plantList.add(PlantData(R.mipmap.test_image_1,
-            "MarshMallow",
-            "Description",
-            "October 5, 2015"))
+        plantViewModel.plants.observe(viewLifecycleOwner){
+            it?.let {
+                if (!plantList.contains(it)){
+                    plantList.add(it)
+                }
+                pagerAdapter = PlantViewPagerAdapter(requireContext(), plantList)
+                binding.viewPager.adapter = pagerAdapter
+                binding.viewPager.setPadding(100, 0, 100, 0)
+                pagerAdapter.notifyDataSetChanged()
+            }
+        }
+        plantViewModel.getRealTimeUpdate()
 
-        pagerAdapter = PlantViewPagerAdapter(requireContext(), plantList)
-        binding.viewPager.adapter = pagerAdapter
-        binding.viewPager.setPadding(100, 0, 100, 0)
     }
 
     override fun onDestroyView() {

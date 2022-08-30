@@ -8,11 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import com.example.waterme.R
-import com.example.waterme.model.PlantData
+import com.example.waterme.model.Plants
+import com.squareup.picasso.Picasso
 
 class PlantViewPagerAdapter(
     private val context: Context,
-    private val plantList: ArrayList<PlantData>,
+    private val plantList: ArrayList<Plants>,
 ) : PagerAdapter() {
 
     override fun getCount(): Int = plantList.size
@@ -35,7 +36,7 @@ class PlantViewPagerAdapter(
         val plantDescription: TextView = view.findViewById(R.id.dummy_description)
         val plantReminder: TextView = view.findViewById(R.id.dummy_reminder)
 
-        plantImage.setImageResource(currentModel.imageResources)
+        Picasso.get().load(currentModel.imageResources).into(plantImage)
         plantTitle.text = currentModel.plantTitle
         plantDescription.text = currentModel.plantTitle
         plantReminder.text = currentModel.plantTitle
