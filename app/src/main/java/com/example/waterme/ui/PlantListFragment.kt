@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
+import com.example.waterme.R
 import com.example.waterme.adapter.PlantViewPagerAdapter
 import com.example.waterme.databinding.FragmentPlantListBinding
 import com.example.waterme.model.Plants
@@ -37,7 +39,7 @@ class PlantListFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
 
-        _binding = FragmentPlantListBinding.inflate(inflater, container, false)
+        _binding = FragmentPlantListBinding.inflate(layoutInflater, container, false)
         return binding.root
 
     }
@@ -63,6 +65,10 @@ class PlantListFragment : Fragment() {
             }
 
         })
+
+        binding.fab.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
     }
 
     private fun loadCards() {

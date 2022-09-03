@@ -11,6 +11,8 @@ import android.view.Menu
 import android.view.MenuItem
 import com.example.waterme.databinding.ActivityMainBinding
 
+/* The MainActivity class is the main entry point of the app. It contains the app bar and the
+navigation drawer. It also contains the code that sets up the app bar and the navigation drawer */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -27,11 +29,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
