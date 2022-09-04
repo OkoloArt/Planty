@@ -11,11 +11,12 @@ import com.example.waterme.R
 import com.example.waterme.databinding.FragmentAddPlantBinding
 import com.example.waterme.model.Plants
 import com.example.waterme.viewmodel.PlantViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class AddPlantFragment : Fragment() {
+class AddPlantFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentAddPlantBinding? = null
 
@@ -56,5 +57,9 @@ class AddPlantFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val TAG = "ModalBottomSheet"
     }
 }
