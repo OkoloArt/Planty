@@ -8,11 +8,20 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.waterme.R
+import com.example.waterme.model.Plants
 import com.google.common.truth.Truth.assertThat
 import com.google.firebase.FirebaseApp
+import org.hamcrest.Matchers.endsWith
+import org.hamcrest.Matchers.isEmptyString
+import org.hamcrest.text.IsEmptyString
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -47,4 +56,10 @@ class AddPlantFragmentTest{
         onView(ViewMatchers.withId(R.id.button_second)).perform(ViewActions.click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.FirstFragment)
     }
+
+    @Test
+    fun testEditTextEmptyString(){
+
+    }
+
 }
