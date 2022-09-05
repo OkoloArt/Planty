@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso
 class PlantViewPagerAdapter(
     private val context: Context,
     private val plantList: ArrayList<Plants>,
+    private val onItemClicked: (Plants) -> Unit
 ) : PagerAdapter() {
 
     override fun getCount(): Int = plantList.size
@@ -41,7 +42,7 @@ class PlantViewPagerAdapter(
         plantDescription.text = currentModel.plantTitle
         plantReminder.text = currentModel.plantTitle
 
-        view.setOnClickListener {  }
+        view.setOnClickListener { onItemClicked(currentModel) }
 
         container.addView(view)
 

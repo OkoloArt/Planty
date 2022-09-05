@@ -7,27 +7,30 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.ViewPagerActions
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.waterme.R
+import com.google.common.truth.Truth.assertThat
 import com.google.firebase.FirebaseApp
+import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Test
-import com.example.waterme.R
 import org.junit.runner.RunWith
-import com.google.common.truth.Truth.assertThat
 
 
 @RunWith(AndroidJUnit4::class)
-class PlantListFragmentTest{
+class PlantListFragmentTest {
 
     private lateinit var scenario: FragmentScenario<PlantListFragment>
 
     @Before
-     fun setUp() {
+    fun setUp() {
         FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
         // Create a TestNavHostController
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_WaterMe)
-       // scenario.moveToState(newState = Lifecycle.State.STARTED)
+        // scenario.moveToState(newState = Lifecycle.State.STARTED)
     }
 
     @Test
@@ -47,4 +50,15 @@ class PlantListFragmentTest{
         onView(withId(R.id.fab)).perform(click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.SecondFragment)
     }
+
+    @Test
+    fun testViewPagerClick() {
+//        onView(withId(R.id.view_pager))
+//            .perform(ViewPagerActions.scrollToPage(0), click())
+//            .check(matches(withText("Herbicus")))
+
+        onView(allOf(withId(R.id.view_pager), withParentIndex(0))).perform(click())
+        onView(withId(R.id.dummy_title)).check(matches(withText("Herbicus")))
+    }
+
 }
