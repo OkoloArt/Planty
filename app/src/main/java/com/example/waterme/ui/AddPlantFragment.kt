@@ -19,10 +19,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class AddPlantFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentAddPlantBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+
     private val plantViewModel: PlantViewModel by activityViewModels()
 
     override fun onCreateView(

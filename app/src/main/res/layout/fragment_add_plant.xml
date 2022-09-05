@@ -146,9 +146,8 @@
             android:text="Add to Calendar"
             android:textAllCaps="false"
             android:id="@+id/add_to_calendar"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"/>
 
-        </androidx.appcompat.widget.AppCompatButton>
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton

@@ -11,4 +11,7 @@
     <string name="added_plants">Plants has been added successfully</string>
     <string name="error">%1$s</string>
     <string name="plant_type">Plant type</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dummy_text">Lorem ipsum dolor sit amet. Ut quis culpa ut fugit excepturi ad nobis incidunt qui omnis eligendi qui corporis possimus qui nisi perspiciatis nam velit rerum? Non eius sapiente aut voluptas praesentium ea mollitia necessitatibus. \n\nSed dicta optio est consectetur quia a dolore atque eum officia omnis. Et consequatur magnam vel molestiae sunt aut ipsum eveniet qui deleniti voluptatibus eum nesciunt cumque sed voluptas atque ex saepe sequi. In voluptatibus magni est facere rerum id architecto saepe.\n\n Qui enim quia sit optio reprehenderit sit consequatur quidem non optio voluptas et ipsum voluptatem. Non iure eligendi et enim ratione aut recusandae neque aut numquam suscipit. Vel ducimus quidem quo laborum velit non deserunt delectus. Cum amet nesciunt et reprehenderit inventore aut veritatis illo ab praesentium amet sed autem cupiditate id repellat nihil rem blanditiis maiores.</string>
 </resources>
