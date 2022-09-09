@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.AddPlantFragment">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/modal_bottomSheet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/button_second"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_marginBottom="30dp"
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -31,7 +37,7 @@
                 app:civ_border_width="2dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedTextField"
+                android:id="@+id/plant_name"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,29 +76,29 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/water"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Water" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
                 android:id="@+id/fertilize"
-                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Fertilize" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
                 android:id="@+id/prune"
-                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Prune" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
                 android:id="@+id/harvest"
-                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Harvest" />
 
         </LinearLayout>
@@ -104,19 +110,19 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:drawablePadding="12dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
                 android:drawableStart="@drawable/ic_access_time"
-                android:text="Time"/>
+                android:drawablePadding="12dp"
+                android:text="Time" />
 
             <TimePicker
                 android:id="@+id/timePicker"
-                android:theme="@style/DefaultNumberPickerTheme"
                 android:layout_width="250dp"
                 android:layout_height="90dp"
-                android:timePickerMode="spinner"/>
+                android:theme="@style/DefaultNumberPickerTheme"
+                android:timePickerMode="spinner" />
 
         </LinearLayout>
 
@@ -127,12 +133,12 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:drawablePadding="12dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
                 android:drawableStart="@drawable/ic_alarm"
-                android:text="Alert"/>
+                android:drawablePadding="12dp"
+                android:text="Alert" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/alarm_switch"
@@ -142,18 +148,21 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:text="Add to Calendar"
-            android:textAllCaps="false"
             android:id="@+id/add_to_calendar"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to Calendar"
+            android:textAllCaps="false" />
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_second"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="@string/previous" />
-</RelativeLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_second"
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_layout"
+            android:text="@string/previous" />
+
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
