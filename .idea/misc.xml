@@ -3,11 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/drawable/oval_bottom.xml" value="0.1755" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/activity_main.xml" value="0.2611111111111111" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/content_main.xml" value="0.2611111111111111" />
-        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_add_plant.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/day_chip_group.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_add_plant.xml" value="0.25" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_edit_plant.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_plant_detail.xml" value="0.33" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_plant_list.xml" value="0.2611111111111111" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_second.xml" value="0.2611111111111111" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_test_recyler_view.xml" value="0.26871794871794874" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/plant_list_detail.xml" value="0.27291666666666664" />
       </map>
     </option>
