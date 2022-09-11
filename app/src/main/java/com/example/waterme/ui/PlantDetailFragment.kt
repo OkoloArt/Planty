@@ -22,7 +22,6 @@ import com.squareup.picasso.Picasso
  */
 class PlantDetailFragment : Fragment() {
 
-
     private var _binding: FragmentPlantDetailBinding? = null
     private val binding get() = _binding!!
 
@@ -41,9 +40,9 @@ class PlantDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        plantViewModel.currentPlant.observe(viewLifecycleOwner){
-            bind(plants = it)
-        }
+//        plantViewModel.currentPlant.observe(viewLifecycleOwner){
+//            bind(plants = it)
+//        }
 
     }
     /**

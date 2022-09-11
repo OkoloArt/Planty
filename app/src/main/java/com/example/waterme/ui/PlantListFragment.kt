@@ -9,10 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
+import com.example.waterme.R
 import com.example.waterme.adapter.PlantViewPagerAdapter
 import com.example.waterme.databinding.FragmentPlantListBinding
 import com.example.waterme.model.Plants
 import com.example.waterme.viewmodel.PlantViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 /**
@@ -26,8 +28,6 @@ class PlantListFragment : Fragment() {
     private var plantList = arrayListOf<Plants>()
     private lateinit var pagerAdapter: PlantViewPagerAdapter
     private val plantViewModel: PlantViewModel by activityViewModels()
-
-    var keySn = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,25 +67,25 @@ class PlantListFragment : Fragment() {
                 modalBottomSheet.show(it, AddPlantFragment.TAG)
             }
         }
+
     }
 
     private fun loadCards() {
-
         plantViewModel.plants.observe(viewLifecycleOwner) {
             it?.let {
-               addPlants(it)
+                addPlants(it)
             }
-            pagerAdapter = PlantViewPagerAdapter(requireContext(), plantList) { plants ->
+            pagerAdapter = PlantViewPagerAdapter(requireContext(), plantList, findNavController(),
+                requireFragmentManager(),plantViewModel) { plants ->
                 plants.let {
                     plantViewModel.setCurrent(plants)
-                    val action = PlantListFragmentDirections.actionFirstFragmentToPlantDetailFragment()
-                    findNavController().navigate(action)
                 }
             }
 
             binding.viewPager.adapter = pagerAdapter
             binding.viewPager.setPadding(100, 0, 100, 0)
             pagerAdapter.notifyDataSetChanged()
+
         }
         plantViewModel.getRealTimeUpdate()
 
@@ -96,9 +96,13 @@ class PlantListFragment : Fragment() {
         _binding = null
     }
 
-    private fun addPlants(plants: Plants){
+    private fun addPlants(plants: Plants) {
         if (!plantList.contains(plants)) {
             plantList.add(plants)
+        }else{
+            if (plants.isDeleted){
+                plantList.remove(plants)
+            }
         }
     }
 }

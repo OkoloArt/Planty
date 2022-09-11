@@ -21,18 +21,18 @@ import com.google.android.material.chip.Chip
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class AddPlantFragment : BottomSheetDialogFragment() {
+class AddPlantFragment() : BottomSheetDialogFragment() {
 
     private var _binding: FragmentAddPlantBinding? = null
     private val binding get() = _binding!!
 
-    private var dateArray = mutableListOf("Mon","Tue", "Wed")
+    private var dateArray = mutableListOf<String>()
     private var hours = 0
     private var minutes = 0
-    private var setAlarm = true
+    private var setAlarm = false
     private var plantName = ""
     private var plantImage = ""
-    private var plantAction = mutableListOf("Water","Fertilize")
+    private var plantAction = mutableListOf("Water", "Fertilize")
 
     private val plantViewModel: PlantViewModel by activityViewModels()
 
@@ -56,8 +56,8 @@ class AddPlantFragment : BottomSheetDialogFragment() {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
         initChip()
+        getAlarmNotificationSelection()
         binding.chipGroupDay.forEach { child ->
-            checkDaySelectionFromFirebase(child)
             (child as? Chip)?.setOnCheckedChangeListener { _, _ ->
                 getDaySelection()
             }
@@ -67,34 +67,18 @@ class AddPlantFragment : BottomSheetDialogFragment() {
         }
     }
 
+
     private fun getDaySelection() {
         val ids = binding.chipGroupDay.checkedChipIds
-        val titles = mutableListOf<String>()
-
+        dateArray.clear()
         ids.forEach { id ->
-            titles.add(binding.chipGroupDay.findViewById<Chip>(id).text.toString())
+            dateArray.add(binding.chipGroupDay.findViewById<Chip>(id).text.toString())
         }
-        val text = if (titles.isNotEmpty()) {
-            titles.joinToString(", ")
+        val text = if (dateArray.isNotEmpty()) {
+            dateArray.joinToString(", ")
         } else {
             "No Choice"
         }
-//        binding.buttonSecond.setOnClickListener {
-//            Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
-//        }
-
-    }
-
-    private fun checkDaySelectionFromFirebase(child: View) {
-        val text = (child as? Chip)?.text.toString()
-        for (i in dateArray.indices) {
-            if (text == dateArray[i]) {
-                (child as? Chip)?.isChecked = true
-            }
-        }
-//        binding.buttonSecond.setOnClickListener {
-//            Toast.makeText(requireContext(), dateArray.joinToString(","), Toast.LENGTH_SHORT).show()
-//        }
     }
 
     private fun initChip() {
@@ -125,12 +109,11 @@ class AddPlantFragment : BottomSheetDialogFragment() {
         plantViewModel.addPlants(plants)
     }
 
-    private fun getPlantType(): String {
+    private fun getPlantName(): String {
         return binding.plantName.editText?.text.toString()
     }
 
     private fun getAlarmNotificationSelection() {
-        var setAlarm = false
         binding.alarmSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 setAlarm = isChecked
@@ -138,26 +121,12 @@ class AddPlantFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun checkAlarmNotificationSelectionFromFirebase() {
-
-    }
-
-    private fun getTimeSelection() {
-        binding.timePicker.setOnTimeChangedListener { _, hour, minutes ->
-
-            binding.buttonSecond.setOnClickListener {
-                Toast.makeText(requireContext(), "$hour : $minutes", Toast.LENGTH_SHORT).show()
-            }
+    private fun getTimeSelection(): List<Int> {
+        binding.timePicker.setOnTimeChangedListener { _, hour, minute ->
+            hours = hour
+            minutes = minute
         }
-    }
-
-    private fun checkTimeSelectionFromFirebase() {
-        val hours = 15
-        val minutes = 30
-        binding.timePicker.apply {
-            hour = hours
-            minute = minutes
-        }
+        return listOf(hours,minutes)
     }
 
     private fun setHeight() {
