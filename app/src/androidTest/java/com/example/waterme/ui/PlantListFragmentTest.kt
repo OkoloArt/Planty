@@ -53,12 +53,12 @@ class PlantListFragmentTest {
 
     @Test
     fun testViewPagerClick() {
-//        onView(withId(R.id.view_pager))
-//            .perform(ViewPagerActions.scrollToPage(0), click())
-//            .check(matches(withText("Herbicus")))
+        onView(withId(R.id.view_pager))
+            .perform(ViewPagerActions.scrollToPage(0), click())
+            .check(matches(withText("Herbicus")))
 
-        onView(allOf(withId(R.id.view_pager), withParentIndex(0))).perform(click())
-        onView(withId(R.id.dummy_title)).check(matches(withText("Herbicus")))
+//        onView(allOf(withId(R.id.view_pager), withParentIndex(0))).perform(click())
+//        onView(withId(R.id.dummy_title)).check(matches(withText("Herbicus")))
     }
 
 }
