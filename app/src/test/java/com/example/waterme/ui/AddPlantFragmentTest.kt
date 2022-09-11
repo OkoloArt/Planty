@@ -21,15 +21,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class AddPlantFragmentTest {
 
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
-
-    @Before
-    fun setUp() {
-        FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
-        // Create a TestNavHostController
-    }
 }
