@@ -13,6 +13,7 @@ import com.example.waterme.adapter.PlantViewPagerAdapter
 import com.example.waterme.databinding.FragmentPlantDetailBinding
 import com.example.waterme.model.Plants
 import com.example.waterme.viewmodel.PlantViewModel
+import com.example.waterme.viewmodel.PlantViewModelFactory
 import com.squareup.picasso.Picasso
 
 /**
@@ -25,7 +26,9 @@ class PlantDetailFragment : Fragment() {
     private var _binding: FragmentPlantDetailBinding? = null
     private val binding get() = _binding!!
 
-    private val plantViewModel: PlantViewModel by activityViewModels()
+    private val plantViewModel: PlantViewModel by activityViewModels{
+        PlantViewModelFactory(requireActivity().application)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

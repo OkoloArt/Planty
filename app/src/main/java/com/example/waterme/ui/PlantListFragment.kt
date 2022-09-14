@@ -14,6 +14,7 @@ import com.example.waterme.adapter.PlantViewPagerAdapter
 import com.example.waterme.databinding.FragmentPlantListBinding
 import com.example.waterme.model.Plants
 import com.example.waterme.viewmodel.PlantViewModel
+import com.example.waterme.viewmodel.PlantViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
@@ -27,7 +28,10 @@ class PlantListFragment : Fragment() {
 
     private var plantList = arrayListOf<Plants>()
     private lateinit var pagerAdapter: PlantViewPagerAdapter
-    private val plantViewModel: PlantViewModel by activityViewModels()
+
+    private val plantViewModel: PlantViewModel by activityViewModels{
+        PlantViewModelFactory(requireActivity().application)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

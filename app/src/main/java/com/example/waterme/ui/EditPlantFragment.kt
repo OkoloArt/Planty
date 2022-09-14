@@ -11,6 +11,7 @@ import com.example.waterme.R
 import com.example.waterme.databinding.FragmentEditPlantBinding
 import com.example.waterme.model.Plants
 import com.example.waterme.viewmodel.PlantViewModel
+import com.example.waterme.viewmodel.PlantViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.squareup.picasso.Picasso
@@ -33,7 +34,9 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
     private var plantImage = ""
     private var plantAction = mutableListOf("Water", "Fertilize")
 
-    private val plantViewModel: PlantViewModel by activityViewModels()
+    private val plantViewModel: PlantViewModel by activityViewModels{
+        PlantViewModelFactory(requireActivity().application)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
