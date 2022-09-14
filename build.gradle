@@ -17,4 +17,5 @@ task clean(type: Delete) {
 ext {
     lifecycle_version = '2.5.1'
     nav_version = '2.5.2'
+    work_version = "2.6.0"
 }
