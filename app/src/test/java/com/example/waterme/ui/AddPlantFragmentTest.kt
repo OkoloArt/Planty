@@ -24,4 +24,8 @@ import java.util.concurrent.TimeoutException
 @RunWith(RobolectricTestRunner::class)
 class AddPlantFragmentTest {
 
+    @Test
+    fun isAdditionCorrect(){
+
+    }
 }
