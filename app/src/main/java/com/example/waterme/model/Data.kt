@@ -37,3 +37,5 @@ data class Plants(
         return result
     }
 }
+
+data class Time(var hours: Int, var minutes: Int, var seconds: Int)
