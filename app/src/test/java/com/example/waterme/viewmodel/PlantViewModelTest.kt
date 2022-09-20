@@ -1,8 +1,13 @@
 package com.example.waterme.viewmodel
 
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.InstrumentationRegistry
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.work.Configuration
+import androidx.work.impl.utils.SynchronousExecutor
+import androidx.work.testing.WorkManagerTestInitHelper
 import com.example.waterme.model.Plants
 import com.example.waterme.ui.getOrAwaitValue
 import com.google.firebase.FirebaseApp
@@ -22,7 +27,6 @@ class PlantViewModelTest {
 
     @Mock
     private lateinit var plantViewModel: PlantViewModel
-    private var plantList = arrayListOf<Plants>()
 
     @Before
     fun setUp() {
@@ -32,37 +36,10 @@ class PlantViewModelTest {
     }
 
     @Test
-    fun getPlants() {
-    }
-
-    @Test
-    fun addPlants() {
+    fun setCurrentPlants() {
         val plants = Plants("", "", "Carrot")
-        plantViewModel.addPlants(plants)
+        plantViewModel.setCurrent(plants)
         val value = plantViewModel.plants.getOrAwaitValue()
-        addPlants(value)
-        assertEquals(plantList[0].plantTitle, "Carrot")
-    }
-
-    @Test
-    fun getRealTimeUpdate() {
-    }
-
-    @Test
-    fun updatePlant() {
-    }
-
-    @Test
-    fun deletePlant() {
-    }
-
-    private fun addPlants(plants: Plants) {
-        if (!plantList.contains(plants)) {
-            plantList.add(plants)
-        } else {
-            if (plants.isDeleted) {
-                plantList.remove(plants)
-            }
-        }
+        assertEquals(value.plantTitle, "Carrot")
     }
 }
