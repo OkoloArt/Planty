@@ -1,13 +1,13 @@
 package com.example.waterme.viewmodel
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.icu.text.SimpleDateFormat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.example.waterme.NODE_PLANTS
 import com.example.waterme.model.Plants
 import com.example.waterme.worker.WaterReminderWorker
@@ -15,6 +15,7 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class PlantViewModel(application: Application) : ViewModel() {
@@ -31,6 +32,7 @@ class PlantViewModel(application: Application) : ViewModel() {
     private val _currentPlant = MutableLiveData<Plants>()
     val currentPlant: LiveData<Plants> get() = _currentPlant
 
+
     fun addPlants(plants: Plants) {
         plants.plantId = dbPlants.push().key
 
@@ -46,6 +48,7 @@ class PlantViewModel(application: Application) : ViewModel() {
     fun setCurrent(plants: Plants?) {
         _currentPlant.value = plants!!
     }
+
 
     private val childEventListener = object : ChildEventListener {
         override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -116,24 +119,39 @@ class PlantViewModel(application: Application) : ViewModel() {
         duration: Long,
         unit: TimeUnit,
         plantName: String,
+        dateArray: Array<String>
     ) {
         // TODO: create a Data instance with the plantName passed to it
-        val data = createInputData(plantName)
+        val data = createInputData(plantName,dateArray)
 
-        // TODO: Generate a OneTimeWorkRequest with the passed in duration, time unit, and data
-        //  instance
-        val request = OneTimeWorkRequestBuilder<WaterReminderWorker>()
+        val constraint = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+            .setRequiresCharging(false)
+            .setRequiresBatteryNotLow(true)
+            .build()
+
+
+        val request = PeriodicWorkRequestBuilder<WaterReminderWorker>(24,TimeUnit.HOURS,5,TimeUnit.MINUTES)
+            .setConstraints(constraint)
             .setInputData(data)
             .setInitialDelay(duration, unit)
             .build()
+
+        // TODO: Generate a OneTimeWorkRequest with the passed in duration, time unit, and data
+        //  instance
+//        val request = OneTimeWorkRequestBuilder<WaterReminderWorker>()
+//            .setInputData(data)
+//            .setInitialDelay(duration, unit)
+//            .build()
 
         // TODO: Enqueue the request as a unique work request
         workManager.enqueue(request)
     }
 
-    private fun createInputData(plantName: String): Data {
+    private fun createInputData(plantName: String,dateArray:Array<String>): Data {
         val data = Data.Builder()
         data.putString(WaterReminderWorker.nameKey, plantName)
+        data.putStringArray(WaterReminderWorker.stringArrayKey,dateArray)
         return data.build()
     }
 

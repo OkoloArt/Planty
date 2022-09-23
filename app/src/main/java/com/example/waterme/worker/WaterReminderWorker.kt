@@ -23,7 +23,7 @@ class WaterReminderWorker(context: Context, workerParameters: WorkerParameters) 
 
     @SuppressLint("SimpleDateFormat")
     override fun doWork(): Result {
-        val plantName = inputData.getString(nameKey)
+        val plantName = inputData.getString(nameKey)!!
         val dateArray = inputData.getStringArray(stringArrayKey)
         val intent = Intent(applicationContext, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -38,12 +38,16 @@ class WaterReminderWorker(context: Context, workerParameters: WorkerParameters) 
         val date = calendar.time
         val formattedDate =  SimpleDateFormat("EE", Locale.ENGLISH).format(date.time)
 
-//        for (i in dateArray!!.indices){
-//            if (formattedDate.equals(dateArray[i])){
-//
-//            }
-//        }
+        for (i in dateArray!!.indices){
+            if (formattedDate.equals(dateArray[i])){
+                sendNotification(formattedDate,plantName,pendingIntent)
+            }
+        }
 
+        return Result.success()
+    }
+
+    private fun sendNotification(formattedDate:String,plantName:String,pendingIntent: PendingIntent){
         val builder = NotificationCompat.Builder(applicationContext, BaseApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.plants)
             .setContentTitle("Water me! $formattedDate")
@@ -54,7 +58,6 @@ class WaterReminderWorker(context: Context, workerParameters: WorkerParameters) 
         with(NotificationManagerCompat.from(applicationContext)) {
             notify(notificationId, builder.build())
         }
-        return Result.success()
     }
 
     companion object {
