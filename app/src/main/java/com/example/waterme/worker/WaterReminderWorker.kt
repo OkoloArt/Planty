@@ -38,19 +38,20 @@ class WaterReminderWorker(context: Context, workerParameters: WorkerParameters) 
         val date = calendar.time
         val formattedDate =  SimpleDateFormat("EE", Locale.ENGLISH).format(date.time)
 
+
         for (i in dateArray!!.indices){
             if (formattedDate.equals(dateArray[i])){
-                sendNotification(formattedDate,plantName,pendingIntent)
+                sendNotification(plantName,pendingIntent)
             }
         }
 
         return Result.success()
     }
 
-    private fun sendNotification(formattedDate:String,plantName:String,pendingIntent: PendingIntent){
+    private fun sendNotification(plantName:String,pendingIntent: PendingIntent){
         val builder = NotificationCompat.Builder(applicationContext, BaseApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.plants)
-            .setContentTitle("Water me! $formattedDate")
+            .setContentTitle("Water me!")
             .setContentText("It's time to water your $plantName")
             .setContentIntent(pendingIntent)
 
