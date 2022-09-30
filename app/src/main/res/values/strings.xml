@@ -20,6 +20,8 @@
     <string name="accept">Delete</string>
     <string name="channel_name">water_channel</string>
     <string name="channel_description">water_description</string>
+    <string name="notification_title">Water me</string>
+    <string name="notification_description">It\'s time to water your plant</string>
 
     <string-array name="daysOfTheWeek">
         <item>Mon</item>

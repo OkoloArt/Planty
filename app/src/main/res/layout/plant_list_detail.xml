@@ -1,67 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_vertical"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <com.skydoves.doublelift.DoubleLiftLayout
+        android:id="@+id/doubleLiftLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="12dp"
+        app:doubleLift_animation="accelerate"
+        app:doubleLift_cornerRadius="6dp"
+        app:doubleLift_foldedHeight="80dp"
+        app:doubleLift_foldedWidth="18dp"
+        app:doubleLift_startOrientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        app:cardCornerRadius="15dp"
-        android:layout_height="wrap_content">
+        app:cardCornerRadius="15dp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/card_view"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/dummy_image"
-            android:layout_width="match_parent"
-            android:scaleType="fitXY"
-            app:srcCompat="@mipmap/test_image_1"
-            android:layout_height="200dp"/>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/dummy_title"
+            <LinearLayout
+                android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Android Oreo"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/dummy_description"
-                android:text="Android Oreo"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:gravity="end"
-                android:id="@+id/dummy_reminder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Android Oreo"/>
-        </LinearLayout>
-        <androidx.appcompat.widget.AppCompatButton
-            android:gravity="end"
-            android:layout_gravity="bottom"
-            android:id="@+id/edit_plant"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit"/>
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/dummy_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@mipmap/test_image_1" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dummy_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Android Oreo" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dummy_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Android Oreo" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dummy_reminder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="Android Oreo" />
+            </LinearLayout>
+
             <androidx.appcompat.widget.AppCompatButton
-                android:gravity="end"
+                android:id="@+id/edit_plant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:gravity="end"
+                android:text="Edit" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/delete_plant"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Delete"/>
+                android:layout_gravity="bottom"
+                android:gravity="end"
+                android:text="Delete" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
+        </LinearLayout>
+    </com.skydoves.doublelift.DoubleLiftLayout>
 </LinearLayout>

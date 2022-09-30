@@ -26,4 +26,10 @@
     <style name="DefaultNumberPickerTheme" parent="">
         <item name="colorControlNormal">@android:color/transparent</item>
     </style>
+
+    <style name="ThemeOverlay.App.Button" parent="">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorPrimaryDark</item>
+    </style>
 </resources>

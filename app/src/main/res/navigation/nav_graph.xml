@@ -35,7 +35,11 @@
         android:id="@+id/plantDetailFragment"
         android:name="com.example.waterme.ui.PlantDetailFragment"
         android:label="fragment_plant_detail"
-        tools:layout="@layout/fragment_plant_detail"/>
+        tools:layout="@layout/fragment_plant_detail">
+        <argument
+            android:name="plants"
+            app:argType="com.example.waterme.model.Plants"/>
+    </fragment>
     <fragment
         android:id="@+id/testRecylerViewFragment"
         android:name="com.example.waterme.ui.TestRecylerViewFragment"

@@ -69,37 +69,46 @@
         </HorizontalScrollView>
 
         <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/water"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Water" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/fertilize"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Fertilize" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/prune"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Prune" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/harvest"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Harvest" />
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/plantAction"
+                app:singleSelection="false"
+                app:selectionRequired="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/water"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Water"
+                    style="?attr/materialButtonOutlinedStyle"
+                    />
+                <Button
+                    android:id="@+id/fertilize"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fertilize"
+                    />
+                <Button
+                    android:id="@+id/prune"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Prune"
+                    />
+                <Button
+                    android:id="@+id/harvest"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Harvest"
+                    />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
         </LinearLayout>
 
