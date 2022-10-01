@@ -93,4 +93,12 @@ dependencies {
 
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
+    // Work test dependencies
+    androidTestImplementation 'androidx.work:work-testing:2.3.4'
+
+    // Runtime permission
+    implementation 'com.karumi:dexter:6.2.3'
+
+    // Collapsing layout
+    implementation "com.github.skydoves:doublelift:1.0.4"
 }
