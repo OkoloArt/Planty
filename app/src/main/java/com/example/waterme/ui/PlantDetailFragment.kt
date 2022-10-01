@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.waterme.adapter.PlantViewPagerAdapter
 import com.example.waterme.databinding.FragmentPlantDetailBinding
 import com.example.waterme.model.Plants
 import com.example.waterme.viewmodel.PlantViewModel
@@ -23,10 +21,12 @@ import com.squareup.picasso.Picasso
  */
 class PlantDetailFragment : Fragment() {
 
+    private val safeArgs: PlantDetailFragmentArgs by navArgs()
+
     private var _binding: FragmentPlantDetailBinding? = null
     private val binding get() = _binding!!
 
-    private val plantViewModel: PlantViewModel by activityViewModels{
+    private val plantViewModel: PlantViewModel by activityViewModels {
         PlantViewModelFactory(requireActivity().application)
     }
 
@@ -43,20 +43,33 @@ class PlantDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        plantViewModel.currentPlant.observe(viewLifecycleOwner){
-//            bind(plants = it)
+//        val id = arguments?.getSerializable(bundleKey) as? Plants
+        val id = safeArgs.plants
+        bind(id)
+
+//        if () {
+//            plantViewModel.currentPlant.observe(viewLifecycleOwner) { plants ->
+//                plants?.let {
+//                    bind(plants)
+//                }
+//            }
+//        } else {
+//            Toast.makeText(requireContext(), "Plant Not Empty", Toast.LENGTH_SHORT).show()
 //        }
 
     }
+
     /**
      * Binds views with the passed in item data.
      */
     private fun bind(plants: Plants) {
         binding.apply {
             Picasso.get().load(plants.plantImage).into(plantsImage)
-            plantReminderTime.text = "${plants.plantReminderHour} : ${plants.plantReminderMinute} PM"
+            plantTitle.text = plants.plantTitle
+            plantReminderTime.text =
+                "${plants.plantReminderHour} : ${plants.plantReminderMinute} PM"
             plantReminderDays.text = plants.plantReminderDays?.joinToString(". ")
-           // editItem.setOnClickListener { editItem() }
+            // editItem.setOnClickListener { editItem() }
         }
     }
 }
