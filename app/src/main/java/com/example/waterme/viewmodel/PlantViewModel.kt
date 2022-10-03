@@ -1,8 +1,6 @@
 package com.example.waterme.viewmodel
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.icu.text.SimpleDateFormat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +13,6 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class PlantViewModel(application: Application) : ViewModel() {
@@ -81,15 +78,13 @@ class PlantViewModel(application: Application) : ViewModel() {
         dbPlants.addChildEventListener(childEventListener)
     }
 
-    /**
-     * Retrieve an item from the repository.
-     */
-    fun retrieveItem(plants: Plants): Plants {
-        return plants
-    }
-
-    fun isUserInputValid(plantName: String): Boolean {
-        if (plantName.isBlank()) {
+    fun isUserInputValid(
+        plantName: String,
+        days: MutableList<String>,
+        action: MutableList<String>,
+        time: MutableList<Int>,
+    ): Boolean {
+        if (plantName.isBlank() || days.isEmpty() || action.isEmpty() || time.isEmpty()) {
             return false
         }
         return true
@@ -118,11 +113,10 @@ class PlantViewModel(application: Application) : ViewModel() {
     internal fun scheduleReminder(
         duration: Long,
         unit: TimeUnit,
-        plantName: String,
-        dateArray: Array<String>
+        plants: Plants,
     ) {
         // TODO: create a Data instance with the plantName passed to it
-        val data = createInputData(plantName,dateArray)
+        val data = createInputData(plants)
 
         val constraint = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
@@ -130,28 +124,36 @@ class PlantViewModel(application: Application) : ViewModel() {
             .setRequiresBatteryNotLow(true)
             .build()
 
-
-        val request = PeriodicWorkRequestBuilder<WaterReminderWorker>(24,TimeUnit.HOURS,5,TimeUnit.MINUTES)
-            .setConstraints(constraint)
-            .setInputData(data)
-            .setInitialDelay(duration, unit)
-            .build()
-
-        // TODO: Generate a OneTimeWorkRequest with the passed in duration, time unit, and data
-        //  instance
-//        val request = OneTimeWorkRequestBuilder<WaterReminderWorker>()
-//            .setInputData(data)
-//            .setInitialDelay(duration, unit)
-//            .build()
+       // TODO: Generate a OneTimeWorkRequest with the passed in duration, time unit, and data instance
+        val request =
+            PeriodicWorkRequestBuilder<WaterReminderWorker>(24, TimeUnit.HOURS, 5, TimeUnit.MINUTES)
+                .setConstraints(constraint)
+                .setInputData(data)
+                .setInitialDelay(duration, unit)
+                .build()
 
         // TODO: Enqueue the request as a unique work request
         workManager.enqueue(request)
     }
 
-    private fun createInputData(plantName: String,dateArray:Array<String>): Data {
+    private fun createInputData(plants: Plants): Data {
         val data = Data.Builder()
-        data.putString(WaterReminderWorker.nameKey, plantName)
-        data.putStringArray(WaterReminderWorker.stringArrayKey,dateArray)
+        data.putString(WaterReminderWorker.imageKey, plants.plantImage)
+        data.putString(WaterReminderWorker.nameKey, plants.plantTitle)
+        data.putString(WaterReminderWorker.descriptionKey, plants.plantDescription)
+        data.putBoolean(WaterReminderWorker.alarmKey, plants.plantAlarmChoice!!)
+        plants.plantReminderTime?.let {
+            data.putIntArray(WaterReminderWorker.timeArrayKey,
+                it.toIntArray())
+        }
+        plants.plantReminderDays?.let {
+            data.putStringArray(WaterReminderWorker.dayArrayKey,
+                it.toTypedArray())
+        }
+        plants.plantAction?.let {
+            data.putStringArray(WaterReminderWorker.actionArrayKey,
+                it.toTypedArray())
+        }
         return data.build()
     }
 
