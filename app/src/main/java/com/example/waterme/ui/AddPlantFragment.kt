@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.example.waterme.R
 import com.example.waterme.databinding.FragmentAddPlantBinding
 import com.example.waterme.model.Plants
@@ -31,7 +30,6 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.PermissionListener
-import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -45,10 +43,10 @@ class AddPlantFragment() : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private var dateArray = mutableListOf<String>()
-    private var hours = 0
-    private var minutes = 0
+    private var timeArray = mutableListOf<Int>()
     private var setAlarm = false
-    private var plantAction = mutableListOf<String>()
+    private var actionArray = mutableListOf<String>()
+
     private var imageUri: Uri? = null
     private val pickImage = 100
 
@@ -76,17 +74,11 @@ class AddPlantFragment() : BottomSheetDialogFragment() {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
         initChip()
-        getAlarmNotificationSelection()
-        binding.chipGroupDay.forEach { child ->
-            (child as? Chip)?.setOnCheckedChangeListener { _, _ ->
-                getDaySelection()
-            }
-        }
-        binding.plantsImage.setOnClickListener{
+        binding.plantsImage.setOnClickListener {
             setProfileImage()
         }
         binding.buttonSecond.setOnClickListener {
-            Toast.makeText(requireContext(),"${getPlantAction()}",Toast.LENGTH_SHORT).show()
+            addNewPlants()
         }
     }
 
@@ -103,79 +95,94 @@ class AddPlantFragment() : BottomSheetDialogFragment() {
     }
 
     private fun addNewPlants() {
-
-        val plants = Plants(
-            "",
-            "https://cdn.dribbble.com/userupload/3370424/file/original-661f45e4fbb55e46808ff29e152b0641.png?compress=1&resize=752x564",
-            "Herbicus",
-            "sibbbii",
-            15,
-            30,
-            true,
-            dateArray,
-            plantAction
-        )
-        plantViewModel.addPlants(plants)
+        if (isUserInputValid()) {
+           val plants = Plants(
+                "",
+                getPlantImage(),
+                getPlantName(),
+                "",
+                getTimeSelection(),
+                getAlarmNotificationSelection(),
+                getDaySelection(),
+                getPlantAction()
+            )
+            plantViewModel.addPlants(plants)
+            if (getAlarmNotificationSelection()){
+                setReminder(plants)
+            }
+            dismiss()
+        }else{
+            Toast.makeText(requireContext(),
+                "Please Select the days, action and time as to when you want to be reminded",
+                Toast.LENGTH_SHORT).show()
+        }
     }
 
-    private fun isUserInputValid(): Boolean{
-        val plantName = binding.plantName.editText?.text.toString()
-        return plantViewModel.isUserInputValid(plantName)
+    private fun isUserInputValid(): Boolean {
+        return plantViewModel.isUserInputValid(getPlantName(), getDaySelection(), getPlantAction(), getTimeSelection())
+    }
+
+    private fun getPlantImage(): String {
+        if (imageUri == null){
+            return (R.drawable.plants).toString()
+        }
+        return imageUri.toString()
     }
 
     private fun getPlantName(): String {
         val plantName = binding.plantName.editText?.text.toString()
-        plantViewModel.isUserInputValid(plantName)
+        if (plantName.isBlank()){ binding.plantName.editText?.error = "name cannot be blank"}
         return plantName
-    }
-
-    private fun getPlantImage(): String{
-        return imageUri.toString()
     }
 
     private fun getDaySelection(): MutableList<String> {
         val ids = binding.chipGroupDay.checkedChipIds
         dateArray.clear()
         ids.forEach { id ->
+            Toast.makeText(requireContext(),"$id",Toast.LENGTH_SHORT).show()
             dateArray.add(binding.chipGroupDay.findViewById<Chip>(id).text.toString())
         }
         return dateArray
     }
 
-    private fun getPlantAction(): MutableList<String>{
+    private fun getPlantAction(): MutableList<String> {
         val ids = binding.plantAction.checkedButtonIds
-        plantAction.clear()
+        actionArray.clear()
         ids.forEach { id ->
-            plantAction.add(binding.plantAction.findViewById<Button>(id).text.toString())
+            actionArray.add(binding.plantAction.findViewById<Button>(id).text.toString())
         }
-        return plantAction
+        return actionArray
     }
 
-    private fun getTimeSelection(): List<Int> {
-        hours = binding.timePicker.hour
-        minutes = binding.timePicker.minute
+    private fun getTimeSelection(): MutableList<Int> {
+        timeArray.clear()
+        timeArray.add(binding.timePicker.hour)
+        timeArray.add(binding.timePicker.minute)
+
         binding.timePicker.setOnTimeChangedListener { _, hour, minute ->
-            hours = hour
-            minutes = minute
+            timeArray.add(hour)
+            timeArray.add(minute)
         }
-        return listOf(hours, minutes)
+        return timeArray
     }
 
     private fun getAlarmNotificationSelection(): Boolean {
+        setAlarm = binding.alarmSwitch.isChecked
         binding.alarmSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
                 setAlarm = isChecked
-                setReminder()
-            }
         }
         return setAlarm
     }
 
-    private fun setReminder() {
+//    private fun getDescription():String{
+//        return
+//    }
+
+    private fun setReminder(plants: Plants) {
         val duration = TimeUnit.MILLISECONDS.toSeconds(difference())
         Toast.makeText(requireContext(), "$duration", Toast.LENGTH_SHORT)
             .show()
-        plantViewModel.scheduleReminder(duration, TimeUnit.SECONDS, getPlantName(),dateArray.toTypedArray())
+        plantViewModel.scheduleReminder(duration, TimeUnit.SECONDS, plants)
     }
 
     private fun setHeight() {

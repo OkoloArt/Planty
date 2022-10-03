@@ -1,9 +1,19 @@
 package com.example.waterme.ui
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.icu.text.SimpleDateFormat
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
+import android.widget.ToggleButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,7 +24,14 @@ import com.example.waterme.viewmodel.PlantViewModel
 import com.example.waterme.viewmodel.PlantViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.single.PermissionListener
 import com.squareup.picasso.Picasso
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * A simple [Fragment] subclass.
@@ -27,14 +44,15 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
     private val binding get() = _binding!!
 
     private var dateArray = mutableListOf<String>()
-    private var hours = 0
-    private var minutes = 0
-    private var setAlarm = true
-    private var plantName = ""
-    private var plantImage = ""
-    private var plantAction = mutableListOf("Water", "Fertilize")
+    private var timeArray = mutableListOf<Int>()
+    private var setAlarm = false
+    private var actionArray = mutableListOf<String>()
 
-    private val plantViewModel: PlantViewModel by activityViewModels{
+    private var imageUri: Uri? = null
+    private val pickImage = 100
+
+
+    private val plantViewModel: PlantViewModel by activityViewModels {
         PlantViewModelFactory(requireActivity().application)
     }
 
@@ -51,8 +69,13 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
         super.onViewCreated(view, savedInstanceState)
 
         initChip()
-        //  preLoadCurrentPlantData()
+        binding.plantsImage.setOnClickListener {
+            setProfileImage()
+        }
         bind(plants)
+        binding.updatePlants.setOnClickListener {
+            updatePlantsData()
+        }
     }
 
     private fun initChip() {
@@ -67,41 +90,35 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
         }
     }
 
-    private fun checkDaySelectionFromFirebase(child: View) {
+    private fun checkDaySelectionFromFirebase(child: View, plants: Plants) {
         val text = (child as? Chip)?.text.toString()
-        if (dateArray.isNotEmpty()) {
-            for (i in dateArray.indices) {
-                if (text == dateArray[i]) {
-                    (child as? Chip)?.isChecked = true
+        for (i in plants.plantReminderDays!!.indices){
+            when(text){
+                plants.plantReminderDays!![i] -> { (child as? Chip)?.isChecked = true}
+            }
+        }
+    }
+
+    private fun checkActionSelectionFromFirebase(plants: Plants) {
+        val ids = binding.plantAction.checkedButtonIds
+        if (ids.size == 0) {
+                for (i in plants.plantAction!!.indices) {
+                    when (plants.plantAction!![i]) {
+                        "Water" -> {
+                            binding.plantAction.check(R.id.water)
+                        }
+                        "Fertilize" -> {
+                            binding.plantAction.check(R.id.fertilize)
+                        }
+                        "Prune" -> {
+                            binding.plantAction.check(R.id.prune)
+                        }
+                        "Harvest" -> {
+                            binding.plantAction.check(R.id.harvest)
+                        }
+                    }
                 }
-            }
         }
-    }
-
-    private fun preLoadCurrentPlantData() {
-        plantViewModel.currentPlant.observe(viewLifecycleOwner) {
-            it?.let {
-                bind(it)
-            }
-        }
-    }
-
-    private fun checkAlarmNotificationSelectionFromFirebase() {
-
-    }
-
-    private fun getDaySelection() {
-        val ids = binding.chipGroupDay.checkedChipIds
-        dateArray.clear()
-        ids.forEach { id ->
-            dateArray.add(binding.chipGroupDay.findViewById<Chip>(id).text.toString())
-        }
-        val text = if (dateArray.isNotEmpty()) {
-            dateArray.joinToString(", ")
-        } else {
-            "No Choice"
-        }
-
     }
 
     /**
@@ -109,32 +126,182 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
      */
     private fun bind(plants: Plants) {
         binding.apply {
-            Picasso.get().load(plants.plantImage).into(plantsImage)
-            timePicker.apply {
-                hour = plants.plantReminderHour!!
-                minute = plants.plantReminderMinute!!
-            }
-            dateArray = if (plants.plantReminderDays.isNullOrEmpty()) {
-                mutableListOf()
+            if (plants.plantImage != null) {
+                Picasso.get().load(plants.plantImage).into(plantsImage)
             } else {
-                plants.plantReminderDays!!
+                Picasso.get().load(R.drawable.plants).into(plantsImage)
             }
-            binding.chipGroupDay.forEach { child ->
-                checkDaySelectionFromFirebase(child)
-                (child as? Chip)?.setOnCheckedChangeListener { _, _ ->
-                    getDaySelection()
-                }
+            timePicker.apply {
+                hour = plants.plantReminderTime!![0]
+                minute = plants.plantReminderTime!![1]
             }
-            updatePlants.setOnClickListener { updatePlantsData() }
+            plantName.editText?.setText(plants.plantTitle!!)
+            alarmSwitch.isChecked = plants.plantAlarmChoice!!
+
+
+            chipGroupDay.forEach { child ->
+                checkDaySelectionFromFirebase(child, plants)
+            }
+            checkActionSelectionFromFirebase(plants)
         }
     }
 
 
     private fun updatePlantsData() {
-        plants.plantImage =
-            "https://cdn.dribbble.com/userupload/3511028/file/original-59f0713ce9ecd28bab4d7c053b8321b7.jpg?compress=1&resize=1024x768"
-        plants.plantReminderDays = dateArray
-        plantViewModel.updatePlant(plants)
+
+        if (isUserInputValid()) {
+            plants.plantImage = getPlantImage()
+            plants.plantTitle = getPlantName()
+            plants.plantDescription = ""
+            plants.plantReminderTime = getTimeSelection()
+            plants.plantAlarmChoice = getAlarmNotificationSelection()
+            plants.plantReminderDays = getDaySelection()
+            plants.plantAction = getPlantAction()
+
+            plantViewModel.updatePlant(plants)
+            if (getAlarmNotificationSelection()) {
+                setReminder(plants)
+            }
+            dismiss()
+        } else {
+            Toast.makeText(requireContext(),
+                "Please Select the days, action and time as to when you want to be reminded",
+                Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun isUserInputValid(): Boolean {
+        return plantViewModel.isUserInputValid(getPlantName(),
+            getDaySelection(),
+            getPlantAction(),
+            getTimeSelection())
+    }
+
+    private fun getPlantImage(): String {
+        if (imageUri == null){
+            return plants.plantImage!!
+        }
+        return imageUri.toString()
+    }
+
+    private fun getPlantName(): String {
+        val plantName = binding.plantName.editText?.text.toString()
+        if (plantName.isBlank()) {
+            binding.plantName.editText?.error = "name cannot be blank"
+        }
+        return plantName
+    }
+
+    private fun getDaySelection(): MutableList<String> {
+        val ids = binding.chipGroupDay.checkedChipIds
+        dateArray.clear()
+        ids.forEach { id ->
+            dateArray.add(binding.chipGroupDay.findViewById<Chip>(id).text.toString())
+        }
+        return dateArray
+    }
+
+    private fun getPlantAction(): MutableList<String> {
+        val ids = binding.plantAction.checkedButtonIds
+        actionArray.clear()
+        ids.forEach { id ->
+            actionArray.add(binding.plantAction.findViewById<Button>(id).text.toString())
+        }
+        return actionArray
+    }
+
+    private fun getTimeSelection(): MutableList<Int> {
+        timeArray.clear()
+        timeArray.add(binding.timePicker.hour)
+        timeArray.add(binding.timePicker.minute)
+
+        binding.timePicker.setOnTimeChangedListener { _, hour, minute ->
+            timeArray.add(hour)
+            timeArray.add(minute)
+        }
+        return timeArray
+    }
+
+    private fun getAlarmNotificationSelection(): Boolean {
+        setAlarm = binding.alarmSwitch.isChecked
+        binding.alarmSwitch.setOnCheckedChangeListener { _, isChecked ->
+            setAlarm = isChecked
+        }
+        return setAlarm
+    }
+
+//    private fun getDescription():String{
+//        return
+//    }
+
+    private fun setReminder(plants: Plants) {
+        val duration = TimeUnit.MILLISECONDS.toSeconds(difference())
+        Toast.makeText(requireContext(), "$duration", Toast.LENGTH_SHORT)
+            .show()
+        plantViewModel.scheduleReminder(duration, TimeUnit.SECONDS, plants)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun difference(): Long {
+
+        val calendar = Calendar.getInstance()
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinutes = calendar.get(Calendar.MINUTE)
+        val currentSeconds = calendar.get(Calendar.SECOND)
+        val selectedHour = getTimeSelection()[0]
+        val selectedMinutes = getTimeSelection()[1]
+
+        val simpleDateFormat = SimpleDateFormat("HH:mm:ss")
+        val startDate = simpleDateFormat.parse("$currentHour:$currentMinutes:$currentSeconds")
+        val endDate = simpleDateFormat.parse("$selectedHour:$selectedMinutes:00")
+
+        return endDate.time - startDate.time
+    }
+
+    private fun setProfileImage() {
+        Dexter.withContext(requireContext())
+            .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+            .withListener(object : PermissionListener {
+                override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                    val gallery =
+                        Intent(Intent.ACTION_OPEN_DOCUMENT,
+                            MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                    gallery.flags = (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                            or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+                    startActivityForResult(gallery, pickImage)
+                }
+
+                override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                    Toast.makeText(requireContext(), "Permission failed", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    p0: com.karumi.dexter.listener.PermissionRequest?,
+                    p1: PermissionToken?,
+                ) {
+                    TODO("Not yet implemented")
+                }
+
+            }).check()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == AppCompatActivity.RESULT_OK && requestCode == pickImage) {
+            imageUri = data?.data
+            if (imageUri == null) return
+            requireActivity().contentResolver.takePersistableUriPermission(imageUri!!,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            binding.plantsImage.setImageURI(imageUri)
+        }
     }
 
     companion object {
