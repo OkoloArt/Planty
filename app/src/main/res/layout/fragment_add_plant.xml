@@ -3,46 +3,206 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
     tools:context=".ui.AddPlantFragment">
 
     <RelativeLayout
         android:id="@+id/modal_bottomSheet"
         android:layout_width="match_parent"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_marginBottom="30dp"
-        android:id="@+id/linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Plants" />
-
         <LinearLayout
+            android:id="@+id/linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginBottom="30dp"
+            android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/plants_image"
-                android:layout_width="80dp"
-                android:layout_height="96dp"
-                android:src="@drawable/plants"
-                app:civ_border_color="#ffff"
-                app:civ_border_width="2dp" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="6dp"
+                android:text="Add Plants"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="96dp"
+                    android:layout_gravity="center">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/plants_image"
+                        android:layout_width="80dp"
+                        android:layout_height="96dp"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:src="@drawable/plants"
+                        app:civ_border_color="#ffff"
+                        app:civ_border_width="2dp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="bottom|end"
+                        android:src="@drawable/plants"
+                        app:civ_border_color="#ffff"
+                        app:civ_border_width="2dp" />
+                </FrameLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/plant_name"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:hint="@string/plant_type"
+                    app:hintAnimationEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </HorizontalScrollView>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/plantAction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:selectionRequired="true"
+                    app:singleSelection="false">
+
+                    <Button
+                        android:id="@+id/water"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Water" />
+
+                    <Button
+                        android:id="@+id/fertilize"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fertilize" />
+
+                    <Button
+                        android:id="@+id/prune"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Prune" />
+
+                    <Button
+                        android:id="@+id/harvest"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Harvest" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:drawableStart="@drawable/ic_access_time"
+                    android:drawablePadding="12dp"
+                    android:text="Time"
+                    android:textSize="18sp"
+                    app:fontFamily="sans-serif-black" />
+
+                <TimePicker
+                    android:id="@+id/timePicker"
+                    android:layout_width="250dp"
+                    android:layout_height="90dp"
+                    android:theme="@style/DefaultNumberPickerTheme"
+                    android:timePickerMode="spinner" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:drawableStart="@drawable/ic_alarm"
+                    android:drawablePadding="12dp"
+                    android:text="Alert"
+                    android:textSize="18sp"
+                    app:fontFamily="sans-serif-black" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/alarm_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/plant_name"
+                android:id="@+id/plant_description"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:hint="@string/plant_type"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:hint="@string/plant_description"
                 app:hintAnimationEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -53,124 +213,12 @@
 
         </LinearLayout>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:scrollbars="none">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chip_group_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-            </com.google.android.material.chip.ChipGroup>
-
-        </HorizontalScrollView>
-
-        <LinearLayout
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/plantAction"
-                app:singleSelection="false"
-                app:selectionRequired="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <Button
-                    android:id="@+id/water"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Water"
-                    style="?attr/materialButtonOutlinedStyle"
-                    />
-                <Button
-                    android:id="@+id/fertilize"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fertilize"
-                    />
-                <Button
-                    android:id="@+id/prune"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Prune"
-                    />
-                <Button
-                    android:id="@+id/harvest"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Harvest"
-                    />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:drawableStart="@drawable/ic_access_time"
-                android:drawablePadding="12dp"
-                android:text="Time" />
-
-            <TimePicker
-                android:id="@+id/timePicker"
-                android:layout_width="250dp"
-                android:layout_height="90dp"
-                android:theme="@style/DefaultNumberPickerTheme"
-                android:timePickerMode="spinner" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:drawableStart="@drawable/ic_alarm"
-                android:drawablePadding="12dp"
-                android:text="Alert" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/alarm_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/add_to_calendar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add to Calendar"
-            android:textAllCaps="false" />
-
-    </LinearLayout>
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_second"
-            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/linear_layout"
+            android:layout_marginTop="30dp"
             android:text="@string/previous" />
 
     </RelativeLayout>

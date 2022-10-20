@@ -55,25 +55,13 @@
                 android:gravity="center"
                 android:text="Tue . Thu . Sat" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
+                <GridLayout
+                    android:id="@+id/rootLayout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="10:30 AM" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="10:30 AM" />
-            </LinearLayout>
+                    android:columnCount="2"
+                    android:rowCount="2"
+                    android:layout_gravity="center" />
 
             <LinearLayout
                 android:layout_width="match_parent"
