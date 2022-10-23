@@ -1,6 +1,5 @@
 package com.example.waterme.ui
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation
@@ -15,18 +14,13 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.waterme.R
-import com.example.waterme.model.Plants
-import com.example.waterme.viewmodel.PlantViewModel
 import com.google.android.material.chip.Chip
 import com.google.common.truth.Truth.assertThat
 import com.google.firebase.FirebaseApp
 import org.hamcrest.Matchers.*
-import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class AddPlantFragmentTest{

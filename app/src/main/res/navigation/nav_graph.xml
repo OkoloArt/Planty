@@ -41,11 +41,6 @@
             app:argType="com.example.waterme.model.Plants"/>
     </fragment>
     <fragment
-        android:id="@+id/testRecylerViewFragment"
-        android:name="com.example.waterme.ui.TestRecylerViewFragment"
-        android:label="fragment_test_recyler_view"
-        tools:layout="@layout/fragment_test_recyler_view" />
-    <fragment
         android:id="@+id/editPlantFragment"
         android:name="com.example.waterme.ui.EditPlantFragment"
         android:label="EditPlantFragment" />
