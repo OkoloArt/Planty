@@ -2,6 +2,7 @@ package com.example.waterme.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
@@ -14,7 +15,7 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.waterme.R
@@ -37,7 +38,7 @@ import java.util.concurrent.TimeUnit
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class AddPlantFragment() : BottomSheetDialogFragment() {
+class AddPlantFragment() : Fragment() {
 
     private var _binding: FragmentAddPlantBinding? = null
     private val binding get() = _binding!!
@@ -65,6 +66,7 @@ class AddPlantFragment() : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+      // setHeight()
         plantViewModel.result.observe(viewLifecycleOwner) {
             val message = if (it == null) {
                 getString(R.string.added_plants)
@@ -100,7 +102,7 @@ class AddPlantFragment() : BottomSheetDialogFragment() {
                 "",
                 getPlantImage(),
                 getPlantName(),
-                "",
+                getPlantDescription(),
                 getTimeSelection(),
                 getAlarmNotificationSelection(),
                 getDaySelection(),
@@ -110,7 +112,7 @@ class AddPlantFragment() : BottomSheetDialogFragment() {
             if (getAlarmNotificationSelection()){
                 setReminder(plants)
             }
-            dismiss()
+//            dismiss()
         }else{
             Toast.makeText(requireContext(),
                 "Please Select the days, action and time as to when you want to be reminded",
@@ -133,6 +135,10 @@ class AddPlantFragment() : BottomSheetDialogFragment() {
         val plantName = binding.plantName.editText?.text.toString()
         if (plantName.isBlank()){ binding.plantName.editText?.error = "name cannot be blank"}
         return plantName
+    }
+
+    private fun getPlantDescription(): String {
+        return binding.plantDescription.editText?.text.toString()
     }
 
     private fun getDaySelection(): MutableList<String> {
@@ -174,10 +180,6 @@ class AddPlantFragment() : BottomSheetDialogFragment() {
         return setAlarm
     }
 
-//    private fun getDescription():String{
-//        return
-//    }
-
     private fun setReminder(plants: Plants) {
         val duration = TimeUnit.MILLISECONDS.toSeconds(difference())
         Toast.makeText(requireContext(), "$duration", Toast.LENGTH_SHORT)
@@ -186,10 +188,9 @@ class AddPlantFragment() : BottomSheetDialogFragment() {
     }
 
     private fun setHeight() {
-        val bottomSheet = dialog?.findViewById(R.id.modal_bottomSheet) as RelativeLayout
-        val standardBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        standardBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-        standardBottomSheetBehavior.peekHeight = RelativeLayout.LayoutParams.MATCH_PARENT
+        val behavior = BottomSheetBehavior.from(binding.modalBottomSheet)
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        behavior.peekHeight = 1000
     }
 
     override fun onDestroyView() {

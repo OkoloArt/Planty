@@ -66,10 +66,8 @@ class PlantListFragment : Fragment() {
         })
 
         binding.fab.setOnClickListener {
-            val modalBottomSheet = AddPlantFragment()
-            fragmentManager?.let {
-                modalBottomSheet.show(it, AddPlantFragment.TAG)
-            }
+        val action = PlantListFragmentDirections.actionFirstFragmentToSecondFragment()
+            findNavController().navigate(action)
         }
 
     }
@@ -81,9 +79,9 @@ class PlantListFragment : Fragment() {
             }
             pagerAdapter = PlantViewPagerAdapter(requireContext(), plantList, findNavController(),
                 requireFragmentManager(),plantViewModel) { plants ->
-                plants.let {
-                    plantViewModel.setCurrent(plants)
-                }
+//                plants.let {
+//                    plantViewModel.setCurrent(plants)
+//                }
             }
 
             binding.viewPager.adapter = pagerAdapter
@@ -94,6 +92,7 @@ class PlantListFragment : Fragment() {
         plantViewModel.getRealTimeUpdate()
 
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
