@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/drawable/btn_blue_normal.xml" value="0.1725" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/drawable/btn_blue_selector.xml" value="0.1725" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/drawable/button_add_background.xml" value="0.1625" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/drawable/ic_access_time.xml" value="0.1625" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/drawable/ic_add.xml" value="0.1235" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/drawable/ic_alarm.xml" value="0.1" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/drawable/image_corner.xml" value="0.1625" />
@@ -13,7 +15,7 @@
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/activity_main.xml" value="0.2611111111111111" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/content_main.xml" value="0.2611111111111111" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/day_chip_group.xml" value="0.27291666666666664" />
-        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_add_plant.xml" value="0.22" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_add_plant.xml" value="0.33" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_edit_plant.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_plant_detail.xml" value="0.33" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/WaterMe/app/src/main/res/layout/fragment_plant_list.xml" value="0.2611111111111111" />
