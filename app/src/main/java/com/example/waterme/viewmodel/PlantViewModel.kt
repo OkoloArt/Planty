@@ -80,11 +80,12 @@ class PlantViewModel(application: Application) : ViewModel() {
 
     fun isUserInputValid(
         plantName: String,
+        plantImage: String,
         days: MutableList<String>,
         action: MutableList<String>,
         time: MutableList<Int>,
     ): Boolean {
-        if (plantName.isBlank() || days.isEmpty() || action.isEmpty() || time.isEmpty()) {
+        if (plantName.isBlank() || plantImage.isBlank() || days.isEmpty() || action.isEmpty() || time.isEmpty()) {
             return false
         }
         return true

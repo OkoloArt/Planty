@@ -7,17 +7,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.viewpager.widget.PagerAdapter
 import com.example.waterme.R
 import com.example.waterme.model.Plants
+import com.example.waterme.ui.EditPlantFragment
 import com.example.waterme.ui.PlantListFragmentDirections
 import com.example.waterme.viewmodel.PlantViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.skydoves.doublelift.DoubleLiftLayout
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 
 class PlantViewPagerAdapter(
     private val context: Context,
@@ -46,36 +50,30 @@ class PlantViewPagerAdapter(
         val plantImage: ImageView = view.findViewById(R.id.dummy_image)
         val plantTitle: TextView = view.findViewById(R.id.dummy_title)
         val plantDescription: TextView = view.findViewById(R.id.dummy_description)
-        val plantReminder: TextView = view.findViewById(R.id.dummy_reminder)
         val doubleLiftLayout3 = view.findViewById<DoubleLiftLayout>(R.id.doubleLiftLayout3)
 
-        if (currentModel.plantImage != null) {
-            Picasso.get().load(currentModel.plantImage).into(plantImage)
-        } else {
-            Picasso.get().load(R.drawable.plants).into(plantImage)
-        }
+
+        Picasso.get().load(currentModel.plantImage).into(plantImage)
         plantTitle.text = currentModel.plantTitle
         plantDescription.text = currentModel.plantTitle
-        plantReminder.text = currentModel.plantTitle
 
-
-        view.findViewById<LinearLayout>(R.id.card_view).setOnClickListener {
+        view.findViewById<CircleImageView>(R.id.details).setOnClickListener {
             onItemClicked(currentModel)
             val action = PlantListFragmentDirections.actionFirstFragmentToPlantDetailFragment(plants = currentModel)
             navController.navigate(action)
         }
 
-        view.findViewById<AppCompatButton>(R.id.edit_plant).setOnClickListener {
-//            val modalBottomSheet = EditPlantFragment(currentModel)
-//            modalBottomSheet.show(fragmentManager, EditPlantFragment.TAG)
+        view.findViewById<CircleImageView>(R.id.edit_plant).setOnClickListener {
+            val modalBottomSheet = EditPlantFragment(currentModel)
+            modalBottomSheet.show(fragmentManager, EditPlantFragment.TAG)
         }
 
-        view.findViewById<AppCompatButton>(R.id.delete_plant).setOnClickListener {
+        view.findViewById<CircleImageView>(R.id.delete_plant).setOnClickListener {
             delete(currentModel)
         }
         doubleLiftLayout3.setOnClickListener {
             if (doubleLiftLayout3.isExpanded) {
-           //     doubleLiftLayout3.collapse()
+            //    doubleLiftLayout3.collapse()
             } else {
                 doubleLiftLayout3.expand()
             }
@@ -90,11 +88,11 @@ class PlantViewPagerAdapter(
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.delete_title)
             .setMessage(R.string.delete_supporting_text)
-            .setNegativeButton(R.string.cancel) { dialog, which ->
+            .setNegativeButton(R.string.cancel) { dialog , _ ->
                 // Respond to neutral button press
                 dialog.cancel()
             }
-            .setPositiveButton(R.string.accept) { dialog, which ->
+            .setPositiveButton(R.string.accept) { dialog , _ ->
                 // Respond to positive button press
                 plantViewModel.deletePlant(plants)
                 dialog.cancel()
