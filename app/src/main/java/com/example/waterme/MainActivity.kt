@@ -1,18 +1,17 @@
 package com.example.waterme
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
 import com.example.waterme.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /* The MainActivity class is the main entry point of the app. It contains the app bar and the
 navigation drawer. It also contains the code that sets up the app bar and the navigation drawer */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration

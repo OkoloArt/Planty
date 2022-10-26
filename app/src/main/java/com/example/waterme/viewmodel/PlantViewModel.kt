@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
 import com.example.waterme.NODE_PLANTS
 import com.example.waterme.model.Plants
@@ -13,12 +12,15 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class PlantViewModel(application: Application) : ViewModel() {
+@HiltViewModel
+class PlantViewModel @Inject constructor(application: Application, private val workManager: WorkManager) : ViewModel() {
 
     private val dbPlants = FirebaseDatabase.getInstance().getReference(NODE_PLANTS)
-    private val workManager = WorkManager.getInstance(application)
+ //   private val workManager = WorkManager.getInstance(application)
 
     private val _result = MutableLiveData<Exception?>()
     val result: LiveData<Exception?> get() = _result
@@ -135,6 +137,7 @@ class PlantViewModel(application: Application) : ViewModel() {
 
         // TODO: Enqueue the request as a unique work request
         workManager.enqueue(request)
+
     }
 
     private fun createInputData(plants: Plants): Data {
@@ -161,15 +164,5 @@ class PlantViewModel(application: Application) : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         dbPlants.removeEventListener(childEventListener)
-    }
-}
-
-class PlantViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(PlantViewModel::class.java)) {
-            PlantViewModel(application) as T
-        } else {
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
     }
 }

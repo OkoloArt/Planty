@@ -7,6 +7,7 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.hilt.work.HiltWorker
 import androidx.navigation.NavDeepLinkBuilder
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -14,10 +15,13 @@ import com.example.waterme.BaseApplication
 import com.example.waterme.R
 import com.example.waterme.model.Plants
 import com.example.waterme.ui.PlantDetailFragmentArgs
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import java.util.*
 import kotlin.random.Random
 
-class WaterReminderWorker(context: Context, workerParameters: WorkerParameters) :
+@HiltWorker
+class WaterReminderWorker @AssistedInject constructor(@Assisted context: Context , @Assisted workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
 
     private val notificationId = Random.nextInt(1000)
