@@ -2,6 +2,7 @@ package com.example.waterme.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
@@ -12,8 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import android.widget.ToggleButton
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,7 +21,6 @@ import com.example.waterme.R
 import com.example.waterme.databinding.FragmentEditPlantBinding
 import com.example.waterme.model.Plants
 import com.example.waterme.viewmodel.PlantViewModel
-import com.example.waterme.viewmodel.PlantViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.karumi.dexter.Dexter
@@ -49,12 +48,8 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
     private var actionArray = mutableListOf<String>()
 
     private var imageUri: Uri? = null
-    private val pickImage = 100
 
-
-    private val plantViewModel: PlantViewModel by activityViewModels {
-        PlantViewModelFactory(requireActivity().application)
-    }
+    private val plantViewModel: PlantViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -146,13 +141,11 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
         }
     }
 
-
     private fun updatePlantsData() {
-
         if (isUserInputValid()) {
             plants.plantImage = getPlantImage()
             plants.plantTitle = getPlantName()
-            plants.plantDescription = ""
+            plants.plantDescription = getPlantDescription()
             plants.plantReminderTime = getTimeSelection()
             plants.plantAlarmChoice = getAlarmNotificationSelection()
             plants.plantReminderDays = getDaySelection()
@@ -171,10 +164,7 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
     }
 
     private fun isUserInputValid(): Boolean {
-        return plantViewModel.isUserInputValid(getPlantName(),
-            getDaySelection(),
-            getPlantAction(),
-            getTimeSelection())
+        return plantViewModel.isUserInputValid(getPlantName(), getPlantImage(), getDaySelection(), getPlantAction(), getTimeSelection())
     }
 
     private fun getPlantImage(): String {
@@ -182,6 +172,10 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
             return plants.plantImage!!
         }
         return imageUri.toString()
+    }
+
+    private fun getPlantDescription(): String {
+        return binding.plantDescription.editText?.text.toString()
     }
 
     private fun getPlantName(): String {
@@ -230,10 +224,6 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
         return setAlarm
     }
 
-//    private fun getDescription():String{
-//        return
-//    }
-
     private fun setReminder(plants: Plants) {
         val duration = TimeUnit.MILLISECONDS.toSeconds(difference())
         Toast.makeText(requireContext(), "$duration", Toast.LENGTH_SHORT)
@@ -274,7 +264,7 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
                     gallery.flags = (Intent.FLAG_GRANT_READ_URI_PERMISSION
                             or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                             or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-                    startActivityForResult(gallery, pickImage)
+                  pickImageLauncher.launch(gallery)
                 }
 
                 override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
@@ -292,14 +282,12 @@ class EditPlantFragment(private val plants: Plants) : BottomSheetDialogFragment(
             }).check()
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == AppCompatActivity.RESULT_OK && requestCode == pickImage) {
-            imageUri = data?.data
-            if (imageUri == null) return
-            requireActivity().contentResolver.takePersistableUriPermission(imageUri!!,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    private var pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK)
+        {
+            imageUri = result.data?.data
+            if (imageUri == null) return@registerForActivityResult
+            requireActivity().contentResolver.takePersistableUriPermission(imageUri!! , Intent.FLAG_GRANT_READ_URI_PERMISSION)
             binding.plantsImage.setImageURI(imageUri)
         }
     }

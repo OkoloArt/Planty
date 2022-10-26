@@ -2,7 +2,7 @@ package com.example.waterme.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Dialog
+import android.app.Activity
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
@@ -12,19 +12,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.waterme.R
 import com.example.waterme.databinding.FragmentAddPlantBinding
 import com.example.waterme.model.Plants
 import com.example.waterme.viewmodel.PlantViewModel
-import com.example.waterme.viewmodel.PlantViewModelFactory
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -33,7 +29,6 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.PermissionListener
 import java.util.*
 import java.util.concurrent.TimeUnit
-
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -51,9 +46,7 @@ class AddPlantFragment() : Fragment() {
     private var imageUri: Uri? = null
     private val pickImage = 100
 
-    private val plantViewModel: PlantViewModel by activityViewModels {
-        PlantViewModelFactory(requireActivity().application)
-    }
+    private val plantViewModel: PlantViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +69,7 @@ class AddPlantFragment() : Fragment() {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
         initChip()
-        binding.plantsImage.setOnClickListener {
+        binding.setPlantImage.setOnClickListener {
             setProfileImage()
         }
         binding.buttonSecond.setOnClickListener {
@@ -112,21 +105,22 @@ class AddPlantFragment() : Fragment() {
             if (getAlarmNotificationSelection()){
                 setReminder(plants)
             }
-//            dismiss()
+            val action = AddPlantFragmentDirections.actionSecondFragmentToFirstFragment()
+            findNavController().navigate(action)
         }else{
             Toast.makeText(requireContext(),
-                "Please Select the days, action and time as to when you want to be reminded",
+                "Please select an image, the days, action and time as to when you want to be reminded",
                 Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun isUserInputValid(): Boolean {
-        return plantViewModel.isUserInputValid(getPlantName(), getDaySelection(), getPlantAction(), getTimeSelection())
+        return plantViewModel.isUserInputValid(getPlantName(), getPlantImage(),getDaySelection(), getPlantAction(), getTimeSelection())
     }
 
     private fun getPlantImage(): String {
         if (imageUri == null){
-            return (R.drawable.plants).toString()
+            return ""
         }
         return imageUri.toString()
     }
@@ -145,7 +139,6 @@ class AddPlantFragment() : Fragment() {
         val ids = binding.chipGroupDay.checkedChipIds
         dateArray.clear()
         ids.forEach { id ->
-            Toast.makeText(requireContext(),"$id",Toast.LENGTH_SHORT).show()
             dateArray.add(binding.chipGroupDay.findViewById<Chip>(id).text.toString())
         }
         return dateArray
@@ -187,12 +180,6 @@ class AddPlantFragment() : Fragment() {
         plantViewModel.scheduleReminder(duration, TimeUnit.SECONDS, plants)
     }
 
-    private fun setHeight() {
-        val behavior = BottomSheetBehavior.from(binding.modalBottomSheet)
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        behavior.peekHeight = 1000
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -200,6 +187,17 @@ class AddPlantFragment() : Fragment() {
 
     companion object {
         const val TAG = "ModalBottomSheet"
+    }
+
+    private var pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK)
+        {
+            // There are no request codes
+            imageUri = result.data?.data
+            if (imageUri == null) return@registerForActivityResult
+            requireActivity().contentResolver.takePersistableUriPermission(imageUri!! , Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            binding.plantsImage.setImageURI(imageUri)
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -230,7 +228,7 @@ class AddPlantFragment() : Fragment() {
                     gallery.flags = (Intent.FLAG_GRANT_READ_URI_PERMISSION
                             or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                             or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-                    startActivityForResult(gallery, pickImage)
+                    pickImageLauncher.launch(gallery)
                 }
 
                 override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
@@ -246,17 +244,5 @@ class AddPlantFragment() : Fragment() {
                 }
 
             }).check()
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == AppCompatActivity.RESULT_OK && requestCode == pickImage) {
-            imageUri = data?.data
-            if (imageUri == null) return
-            requireActivity().contentResolver.takePersistableUriPermission(imageUri!!,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            binding.plantsImage.setImageURI(imageUri)
-        }
     }
 }
