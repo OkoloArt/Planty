@@ -1,38 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:padding="10dp"
     tools:context=".ui.AddPlantFragment">
 
-    <RelativeLayout
-        android:id="@+id/modal_bottomSheet"
-        android:layout_width="match_parent"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:layout_height="wrap_content">
-
         <LinearLayout
-            android:id="@+id/linear_layout"
+            android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
             android:orientation="vertical">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:padding="6dp"
-                android:text="Add Plants"
-                android:textAppearance="?attr/textAppearanceHeadline5"
-                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <FrameLayout
@@ -43,17 +27,18 @@
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/plants_image"
                         android:layout_width="80dp"
-                        android:layout_height="96dp"
+                        android:layout_height="90dp"
                         android:layout_gravity="bottom|center_horizontal"
                         android:src="@drawable/plants"
                         app:civ_border_color="#ffff"
                         app:civ_border_width="2dp" />
 
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/set_plant_image"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_gravity="bottom|end"
-                        android:src="@drawable/plants"
+                        android:src="@drawable/add"
                         app:civ_border_color="#ffff"
                         app:civ_border_width="2dp" />
                 </FrameLayout>
@@ -211,15 +196,11 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_second"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="@string/previous" />
         </LinearLayout>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_second"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linear_layout"
-            android:layout_marginTop="30dp"
-            android:text="@string/previous" />
-
     </RelativeLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>

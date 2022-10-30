@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".ui.PlantDetailFragment">
 
@@ -29,31 +30,31 @@
         android:layout_marginEnd="16dp">
 
         <LinearLayout
+            android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/plant_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="10:30 AM" />
-
-
-            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/plant_reminder_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                app:fontFamily="@font/anton_regular"
                 android:gravity="center"
                 android:text="10:30 AM" />
+
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/plant_reminder_days"
                 android:layout_width="match_parent"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                app:fontFamily="@font/barlow_condensed_regular"
+                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Tue . Thu . Sat" />
+                android:text="@string/placeholder_date" />
 
                 <GridLayout
                     android:id="@+id/rootLayout"
@@ -61,35 +62,21 @@
                     android:layout_height="wrap_content"
                     android:columnCount="2"
                     android:rowCount="2"
+                    android:layout_marginTop="15dp"
                     android:layout_gravity="center" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="10:30 AM" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="10:30 AM" />
-            </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                app:fontFamily="@font/barlow_condensed_regular"
+                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
                 android:text="About" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="@string/dummy_text" />
 
